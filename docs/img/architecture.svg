@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 760" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b949e"/>
+    </marker>
+    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f85149"/>
+    </marker>
+    <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3fb950"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="760" fill="#0d1117"/>
+
+  <!-- Title -->
+  <text x="30" y="40" fill="#e6edf3" font-size="21" font-weight="700">Document Compliance Auditor — multi-agent adversarial review</text>
+  <text x="30" y="62" fill="#8b949e" font-size="13">one agent per rule · adversarial cross-examination · zero-LLM evidence verification · KV-cache prefix reuse · cost-tiered depth</text>
+
+  <!-- ===================== Document-level pipeline ===================== -->
+  <!-- Upload -->
+  <rect x="30" y="104" width="150" height="58" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="105" y="128" fill="#e6edf3" font-size="13" font-weight="600" text-anchor="middle">Document</text>
+  <text x="105" y="145" fill="#8b949e" font-size="11" text-anchor="middle">PDF / DOCX / TXT</text>
+
+  <line x1="180" y1="133" x2="198" y2="133" stroke="#8b949e" marker-end="url(#arr)"/>
+
+  <!-- Parse -->
+  <rect x="200" y="104" width="180" height="58" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="290" y="127" fill="#e6edf3" font-size="12.5" font-weight="600" text-anchor="middle">Parse + page anchors</text>
+  <text x="290" y="144" fill="#8b949e" font-size="11" text-anchor="middle">every citation → a page</text>
+
+  <line x1="380" y1="133" x2="398" y2="133" stroke="#8b949e" marker-end="url(#arr)"/>
+
+  <!-- Warm-up -->
+  <rect x="400" y="104" width="200" height="58" rx="8" fill="#161b22" stroke="#388bfd"/>
+  <text x="500" y="127" fill="#58a6ff" font-size="12.5" font-weight="600" text-anchor="middle">Cold-start warm-up</text>
+  <text x="500" y="144" fill="#8b949e" font-size="11" text-anchor="middle">1 call prefills the KV cache</text>
+
+  <line x1="600" y1="133" x2="618" y2="133" stroke="#8b949e" marker-end="url(#arr)"/>
+
+  <!-- Fan-out -->
+  <rect x="620" y="104" width="220" height="58" rx="8" fill="#161b22" stroke="#bc8cff"/>
+  <text x="730" y="127" fill="#d2a8ff" font-size="12.5" font-weight="600" text-anchor="middle">Per-rule fan-out</text>
+  <text x="730" y="144" fill="#8b949e" font-size="11" text-anchor="middle">asyncio + semaphore (deterministic)</text>
+
+  <!-- Reduce -->
+  <rect x="960" y="104" width="290" height="58" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="1105" y="127" fill="#e6edf3" font-size="12.5" font-weight="600" text-anchor="middle">Reduce → report</text>
+  <text x="1105" y="144" fill="#8b949e" font-size="11" text-anchor="middle">code filters compliant items; only risk items summarized</text>
+
+  <!-- fan-out to the per-rule band -->
+  <path d="M 730 162 V 196" fill="none" stroke="#8b949e" marker-end="url(#arr)"/>
+  <text x="748" y="182" fill="#8b949e" font-size="10.5">N rules in parallel</text>
+
+  <!-- band back up to reduce -->
+  <path d="M 1150 470 V 176 H 1120" fill="none" stroke="#3fb950" marker-end="url(#arrG)"/>
+  <text x="1000" y="466" fill="#3fb950" font-size="10.5">each rule streams to UI + reduce (SSE)</text>
+
+  <!-- ===================== Per-rule pipeline band ===================== -->
+  <rect x="60" y="200" width="1160" height="272" rx="10" fill="#161b22" stroke="#d29922"/>
+  <text x="80" y="226" fill="#d29922" font-size="14" font-weight="700">Per-rule five-step closed loop — cost-tiered: standard runs 1, strict 2, max all 5 (steps 2 &amp; 5 fire only when triggered)</text>
+
+  <!-- Step 1 -->
+  <rect x="80" y="244" width="210" height="120" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="95" y="268" fill="#e6edf3" font-size="12.5" font-weight="700">1 · Initial audit</text>
+  <text x="95" y="288" fill="#8b949e" font-size="11">full doc × one rule</text>
+  <text x="95" y="303" fill="#8b949e" font-size="11">→ structured JSON verdict</text>
+  <text x="95" y="325" fill="#d29922" font-size="11" font-weight="600">1 LLM call</text>
+  <text x="95" y="346" fill="#8b949e" font-size="10.5">focused: no multi-rule</text>
+  <text x="95" y="358" fill="#8b949e" font-size="10.5">context dilution</text>
+
+  <line x1="290" y1="304" x2="308" y2="304" stroke="#8b949e" marker-end="url(#arr)"/>
+
+  <!-- Step 2 -->
+  <rect x="310" y="244" width="210" height="120" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="325" y="268" fill="#e6edf3" font-size="12.5" font-weight="700">2 · Adversarial</text>
+  <text x="325" y="284" fill="#e6edf3" font-size="12.5" font-weight="700">challenge</text>
+  <text x="325" y="305" fill="#8b949e" font-size="11">challenger prompt cross-</text>
+  <text x="325" y="320" fill="#8b949e" font-size="11">examines the verdict</text>
+  <text x="325" y="342" fill="#d29922" font-size="11" font-weight="600">0–1 call (triggered)</text>
+  <text x="325" y="358" fill="#8b949e" font-size="10.5">skipped if compliant + confident</text>
+
+  <line x1="520" y1="304" x2="538" y2="304" stroke="#8b949e" marker-end="url(#arr)"/>
+
+  <!-- Step 3 -->
+  <rect x="540" y="244" width="210" height="120" rx="8" fill="#0d1117" stroke="#3fb950"/>
+  <text x="555" y="268" fill="#3fb950" font-size="12.5" font-weight="700">3 · Evidence check</text>
+  <text x="555" y="288" fill="#8b949e" font-size="11">every cited quote matched</text>
+  <text x="555" y="303" fill="#8b949e" font-size="11">to source, verbatim (±1 pg)</text>
+  <text x="555" y="325" fill="#3fb950" font-size="11" font-weight="600">0 LLM · hard gate</text>
+  <text x="555" y="346" fill="#8b949e" font-size="10.5">unlocatable quote →</text>
+  <text x="555" y="358" fill="#8b949e" font-size="10.5">downgrade to human review</text>
+
+  <line x1="750" y1="304" x2="768" y2="304" stroke="#8b949e" marker-end="url(#arr)"/>
+
+  <!-- Step 4 -->
+  <rect x="770" y="244" width="200" height="120" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="785" y="268" fill="#e6edf3" font-size="12.5" font-weight="700">4 · Trigger check</text>
+  <text x="785" y="288" fill="#8b949e" font-size="11">escalate only on:</text>
+  <text x="785" y="303" fill="#8b949e" font-size="11">violation · conf &lt; 0.8</text>
+  <text x="785" y="318" fill="#8b949e" font-size="11">· flipped conclusion</text>
+  <text x="785" y="346" fill="#d29922" font-size="11" font-weight="600">0 LLM · routing</text>
+
+  <line x1="970" y1="304" x2="988" y2="304" stroke="#8b949e" marker-end="url(#arr)"/>
+
+  <!-- Step 5 -->
+  <rect x="990" y="244" width="210" height="120" rx="8" fill="#0d1117" stroke="#f85149"/>
+  <text x="1005" y="268" fill="#f85149" font-size="12.5" font-weight="700">5 · Independent</text>
+  <text x="1005" y="284" fill="#f85149" font-size="12.5" font-weight="700">validator</text>
+  <text x="1005" y="305" fill="#8b949e" font-size="11">fresh, context-isolated</text>
+  <text x="1005" y="320" fill="#8b949e" font-size="11">re-review</text>
+  <text x="1005" y="342" fill="#f85149" font-size="10.5" font-weight="600">asymmetric consensus:</text>
+  <text x="1005" y="356" fill="#8b949e" font-size="10.5">may escalate, never acquit</text>
+
+  <!-- outcomes row inside band -->
+  <path d="M 645 364 V 398" fill="none" stroke="#3fb950" marker-end="url(#arrG)"/>
+  <rect x="470" y="402" width="350" height="52" rx="8" fill="#161b22" stroke="#3fb950"/>
+  <text x="645" y="424" fill="#3fb950" font-size="12" font-weight="600" text-anchor="middle">Verdict + verified evidence</text>
+  <text x="645" y="441" fill="#8b949e" font-size="10.5" text-anchor="middle">violation / compliant / needs_review / not_applicable</text>
+
+  <path d="M 1095 364 V 398 H 820" fill="none" stroke="#f85149" marker-end="url(#arrR)"/>
+  <text x="1090" y="384" fill="#f85149" font-size="10.5" text-anchor="end">tries to acquit a violation → human review</text>
+
+  <!-- ===================== Metric strip ===================== -->
+  <rect x="30" y="640" width="290" height="96" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="46" y="666" fill="#e6edf3" font-size="15" font-weight="700">96% recall · 81% precision</text>
+  <text x="46" y="687" fill="#8b949e" font-size="11">synthetic benchmark, strict depth</text>
+  <text x="46" y="702" fill="#8b949e" font-size="11">8 contracts × 10 rules, 26 planted</text>
+  <text x="46" y="717" fill="#8b949e" font-size="11">violations, hand-written + verified</text>
+
+  <rect x="336" y="640" width="290" height="96" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="352" y="666" fill="#e6edf3" font-size="15" font-weight="700">0 errors · 222 rule-audits</text>
+  <text x="352" y="687" fill="#8b949e" font-size="11">2 real tenders (130 &amp; 169 pages)</text>
+  <text x="352" y="702" fill="#8b949e" font-size="11">× 37 rules × 3 depths, 6 runs</text>
+  <text x="352" y="717" fill="#8b949e" font-size="11">3.6–9.1 min/run, concurrent</text>
+
+  <rect x="642" y="640" width="290" height="96" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="658" y="666" fill="#e6edf3" font-size="15" font-weight="700">76% → 98% cache hit</text>
+  <text x="658" y="687" fill="#8b949e" font-size="11">KV-cache prefix reuse; TTFT −32%</text>
+  <text x="658" y="702" fill="#8b949e" font-size="11">byte-identical cached prefix, variable</text>
+  <text x="658" y="717" fill="#8b949e" font-size="11">rule suffix; warm-up before fan-out</text>
+
+  <rect x="948" y="640" width="302" height="96" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="964" y="666" fill="#e6edf3" font-size="15" font-weight="700">Zero-LLM evidence gate</text>
+  <text x="964" y="687" fill="#8b949e" font-size="11">three-tier quote matching: exact →</text>
+  <text x="964" y="702" fill="#8b949e" font-size="11">fuzzy → keyword anchor; unlocatable</text>
+  <text x="964" y="717" fill="#8b949e" font-size="11">evidence → human review · 68 tests</text>
+</svg>
